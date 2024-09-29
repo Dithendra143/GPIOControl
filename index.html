@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Raspberry Pi GPIO</title>
+    <!-- Include MQTT.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.8/mqtt.min.js"></script>
+</head>
+<body>
+
+<h1>Control Raspberry Pi GPIO</h1>
+
+<!-- Buttons to control GPIO pins -->
+<button onclick="controlGPIO('pin1:on')">Turn ON Pin 1</button>
+<button onclick="controlGPIO('pin1:off')">Turn OFF Pin 1</button>
+<br><br>
+<button onclick="controlGPIO('pin2:on')">Turn ON Pin 2</button>
+<button onclick="controlGPIO('pin2:off')">Turn OFF Pin 2</button>
+
+<script>
+    // Connect to HiveMQ Cloud using WebSocket (wss://)
+    const client = mqtt.connect('wss://bc436eafa05b40809d268cfe63ad768f.s1.eu.hivemq.cloud:8884/mqtt', {
+        username: 'Dithendra',
+        password: 'Yarram@143'
+    });
+
+    client.on('connect', function () {
+        console.log("Connected to HiveMQ Cloud Broker");
+    });
+
+    // Function to publish a message to control GPIO pins
+    function controlGPIO(command) {
+        // Publish the message to the topic 'raspberrypi/gpio'
+        client.publish('raspberrypi/gpio', command);
+        console.log(`Sent: ${command}`);
+    }
+</script>
+
+</body>
+</html>
